@@ -1,4 +1,7 @@
 /**
+ * @Author - Mohammad Abdullah 
+ * 
+ *
  * @brief - A class to deal with time management
  *        - functions include checking for new candles
  *        - and checking if a session is open such as London, NY etc
