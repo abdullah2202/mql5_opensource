@@ -1,6 +1,7 @@
 class CDrawing{
    private:
       color    defaultColor;
+      void     drawTrade(string type, string name, double entry, double tp, double sl, datetime time);
    public:
                CDrawing();
       void     drawHLine(string name, double price, color lineColor);
@@ -12,6 +13,8 @@ class CDrawing{
       void     setDefaultColor(color colorToSet);
       void     deleteAllObjects();
       void     deleteAllObjects(string preText);
+      void     drawLongTrade(string name, double entry, double tp, double sl, datetime time);
+      void     drawShortTrade(string name, double entry, double tp, double sl, datetime time);
 };
 
 CDrawing::CDrawing(){}
@@ -64,3 +67,27 @@ void CDrawing::drawLevels(double& levels[], string preText){
 void CDrawing::setDefaultColor(color colorToSet){
    defaultColor = colorToSet;
 }
+
+void CDrawing::drawLongTrade(string name, double entry, double tp, double sl, datetime time){
+   drawTrade("Long", name, entry, tp, sl, time);
+}
+
+void CDrawing::drawShortTrade(string name, double entry, double tp, double sl, datetime time){
+   drawTrade("Short", name, entry, tp, sl, time);
+}
+
+void CDrawing::drawTrade(string type, string name, double entry, double tp, double sl, datetime time){
+   string strTP = type+"Tradetp_"+name;
+   string strSL = type+"Tradesl_"+name;
+   datetime time2 = time + (5 * 30 * 60);
+
+   ObjectCreate(0, strTP, OBJ_RECTANGLE, 0, time, entry, time2, tp);
+   ObjectCreate(0, strSL, OBJ_RECTANGLE, 0, time, entry, time2, sl);
+   ObjectSetInteger(0, strTP, OBJPROP_FILL, true);
+   ObjectSetInteger(0, strSL, OBJPROP_FILL, true);
+   ObjectSetInteger(0, strTP, OBJPROP_COLOR, clrGreen);
+   ObjectSetInteger(0, strSL, OBJPROP_COLOR, clrFireBrick);
+
+   // TODO: Write Entry, TP and SL info next to drawing 
+}
+
