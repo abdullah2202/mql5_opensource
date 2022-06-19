@@ -43,7 +43,7 @@ void CTradeManagement::makeTrade(
             lot,
             entry,
             sl,
-            0,
+            tp,
             setupType + " trade. Magic Number: " + (string) trade.RequestMagic()
       );
 
