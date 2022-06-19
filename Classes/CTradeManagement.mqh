@@ -14,14 +14,12 @@ class CTradeManagement{
                               double sl
                         );
       void        makeSellTrade(
-                              string setupType, 
                               double lot, 
                               double entry, 
                               double tp, 
                               double sl
                         );
-      void        makeBuyTrade(
-                              string setupType, 
+      void        makeBuyTrade( 
                               double lot, 
                               double entry, 
                               double tp, 
@@ -31,13 +29,13 @@ class CTradeManagement{
 
 CTradeManagement::CTradeManagement(){}
 
-CTradeManagement::makeTrade(
+void CTradeManagement::makeTrade(
       string setupType,
       ENUM_ORDER_TYPE orderType,
       double lot,
       double entry,
       double tp,
-      double sl,
+      double sl
 ){
       trade.PositionOpen(
             _Symbol,
@@ -60,26 +58,24 @@ CTradeManagement::makeTrade(
       }
 }
 
-CTradeManagement::makeBuyTrade(
-      string setupType,
+void CTradeManagement::makeBuyTrade(
       double lot,
       double entry,
       double tp,
-      double sl,
+      double sl
 ){
       double tradeEntry = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
-      makeTrade(setupType,ORDER_TYPE_BUY,lot,tradeEntry,tp,sl);
+      makeTrade("Buy",ORDER_TYPE_BUY,lot,tradeEntry,tp,sl);
 }
 
-CTradeManagement::makeSellTrade(
-      string setupType,
+void CTradeManagement::makeSellTrade(
       double lot,
       double entry,
       double tp,
-      double sl,
+      double sl
 ){
       double tradeEntry = SymbolInfoDouble(_Symbol, SYMBOL_BID);
-      makeTrade(setupType,ORDER_TYPE_SELL,lot,tradeEntry,tp,sl);
+      makeTrade("Sell",ORDER_TYPE_SELL,lot,tradeEntry,tp,sl);
 }
 
 
