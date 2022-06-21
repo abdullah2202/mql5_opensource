@@ -14,7 +14,8 @@ class CCandles{
       double            getClose(int shift);
       double            getBid();
       double            getAsk();
-
+      bool              isBearish(int shift);
+      bool              isBullish(int shift);
 };
 
 // Constructor
@@ -61,4 +62,12 @@ double CCandles::getBid(){
 
 double CCandles::getAsk(){
    return SymbolInfoDouble(_Symbol, SYMBOL_ASK);
+}
+
+bool CCandles::isBearish(int shift = 0){
+   return getOpen(shift) > getClose(shift);
+}
+
+bool CCandles::isBullish(int shift = 0){
+   return getClose(shift) > getOpen(shift);
 }
