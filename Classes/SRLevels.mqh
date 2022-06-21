@@ -1,3 +1,5 @@
+#include <Custom/CCandles.mqh>
+
 class SRLevels{
 private:
    int               numberOfCandles;
@@ -7,6 +9,7 @@ private:
    bool              isClearSupport(double support);
    bool              isClearResistance(double resistance);
    void              arrayPush(double &array[], double price);
+   CCandles          candle;
 public:
                      SRLevels();
    void              setSupport(double price);
@@ -50,15 +53,24 @@ void SRLevels::calculateLevels(){
    // Iterate through candles
    for(int i=1; i<getNumberOfCandles(); i++){
       
-      double open_1 = iOpen(_Symbol,getTimeframe(),i);
-      double close_1 = iClose(_Symbol,getTimeframe(),i);
-      double open_2 = iOpen(_Symbol,getTimeframe(),i+1);
-      double close_2 = iClose(_Symbol,getTimeframe(),i+1);
+      // double open_1 = iOpen(_Symbol,getTimeframe(),i);
+      // double close_1 = iClose(_Symbol,getTimeframe(),i);
+      // double open_2 = iOpen(_Symbol,getTimeframe(),i+1);
+      // double close_2 = iClose(_Symbol,getTimeframe(),i+1);
+
+      double open_1 = candle.getOpen(i);
+      double close_1 = candle.getClose(i);
+      double open_2 = candle.getOpen(i+1);
+      double close_2 = candle.getClose(i+1);
+
       // Calculate Support Levels
       if(
-         close_1 > open_1 &&     // Bullish Candle
-         close_2 < open_2 &&     // Bearish Candle
-         open_1 < SymbolInfoDouble(_Symbol, SYMBOL_ASK) &&     // Support is below current price
+         // close_1 > open_1 &&     // Bullish Candle
+         candle.isBullish(i) &&
+         // close_2 < open_2 &&     // Bearish Candle
+         candle.isBearish(i+1) &&
+         // open_1 < SymbolInfoDouble(_Symbol, SYMBOL_ASK) &&     // Support is below current price
+         open_1 < candle.getAsk() &&
          getSupportsSize() < getNumberOfLevels()
       ){
             if(isClearSupport(open_1)){
@@ -67,9 +79,12 @@ void SRLevels::calculateLevels(){
       }
       // Calculate Resistance Levels
       if(
-         close_1 < open_1  &&    // Bearish Candle
-         close_2 > open_2 &&     // Bullish Candle
-         open_1 > SymbolInfoDouble(_Symbol, SYMBOL_ASK) &&     // Resistance is above current price
+         // close_1 < open_1  &s&    // Bearish Candle
+         candle.isBearish(i) &&
+         // close_2 > open_2 &&     // Bullish Candle
+         candle.isBullish(i+1) &&
+         // open_1 > SymbolInfoDouble(_Symbol, SYMBOL_ASK) &&     // Resistance is above current price
+         open_1 > candle.getAsk() &&
          getResistancesSize() < getNumberOfLevels()
       ){
          if(isClearResistance(open_1)){
