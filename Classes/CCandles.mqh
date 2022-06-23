@@ -8,14 +8,19 @@ class CCandles{
       ENUM_TIMEFRAMES   getTimeframe();
       void              setSymbol(string symbol);
       string            getSymbol();
+
       double            getOpen(int shift);
       double            getHigh(int shift);
       double            getLow(int shift);
       double            getClose(int shift);
+
       double            getBid();
       double            getAsk();
+
       bool              isBearish(int shift);
       bool              isBullish(int shift);
+
+      bool              isBodyBiggerThanWick(int shift);
 };
 
 // Constructor
@@ -71,3 +76,10 @@ bool CCandles::isBearish(int shift = 0){
 bool CCandles::isBullish(int shift = 0){
    return getClose(shift) > getOpen(shift);
 }
+
+bool CCandles::isBodyBiggerThanWick(int shift){
+   double totalSize = getHigh(shift) - getLow(shift);
+   double bodySize = MathAbs(getOpen(shift) - getClose(shift));
+   return bodySize > (totalSize - bodySize);
+}
+
