@@ -1,3 +1,10 @@
+/**
+ * 
+ * This class allows the drawing of objects on the chart.
+ * 
+ * 
+ */
+
 class CDrawing{
    private:
       color    defaultColor;
@@ -18,7 +25,7 @@ class CDrawing{
 };
 
 CDrawing::CDrawing(){}
-
+ 
 void CDrawing::drawHLine(string name, double price, color lineColor){
    ObjectCreate(0, name, OBJ_HLINE, 0, 0, price);
    ObjectSetInteger(0,name,OBJPROP_COLOR,lineColor);       
