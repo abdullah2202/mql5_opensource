@@ -19,6 +19,16 @@ class CCandles{
 
       bool              isBearish(int shift);
       bool              isBullish(int shift);
+      string            getType(int shift);
+
+      double            getTopWickRatio(int shift);
+      double            getBottomWickRatio(int shift);
+      double            getWickRatio(double wick, double body);
+
+      bool              isLowerLow(int shift, int checkShift);
+      bool              isHigherLow(int shift, int checkShift);
+      bool              isLowerHigh(int shift, int checkShift);
+      bool              isHigherHigh(int shift, int checkShift);
 
       bool              isBodyBiggerThanWick(int shift);
 };
@@ -62,11 +72,11 @@ double CCandles::getClose(int shift = 0){
 }
 
 double CCandles::getBid(){
-   return SymbolInfoDouble(_Symbol, SYMBOL_BID);
+   return SymbolInfoDouble(mSymbol, SYMBOL_BID);
 }
 
 double CCandles::getAsk(){
-   return SymbolInfoDouble(_Symbol, SYMBOL_ASK);
+   return SymbolInfoDouble(mSymbol, SYMBOL_ASK);
 }
 
 bool CCandles::isBearish(int shift = 0){
@@ -77,9 +87,65 @@ bool CCandles::isBullish(int shift = 0){
    return getClose(shift) > getOpen(shift);
 }
 
+string CCandles::getType(int shift = 0){
+   if(isBearish(shift)){
+      return "bearish";
+   }
+   return "bullish";
+}
+
+// Gets ratio of top Wick to Candle body
+double CCandles::getTopWickRatio(int shift = 0){
+   double wick;
+   double body;
+   if(isBearish(shift)){
+      wick = getHigh(shift) - getOpen(shift);
+      body = getOpen(shift) - getClose(shift);
+   } else {
+      wick = getHigh(shift) - getClose(shift);
+      body = getClose(shift) - getOpene(shift);
+   }
+   return getWickRatio(wick, body);
+}
+
+// Gets ratio of bottom Wick to Candle body
+double CCandles::getBottomWickRatio(int shift = 0){
+   double wick;
+   double body;
+   if(isBearish(shift)){
+      wick = getClose(shift) - getLow(shift);
+      body = getOpen(shift) - getClose(shift);
+   } else {
+      wick = getOpen(shift) - getLow(shift);
+      body = getClose(shift) - getOpene(shift);
+   }
+   return getWickRatio(wick, body);
+}
+
+double CCandles::getWickRatio(double wick, double body){
+   return wick / body;
+}
+
+bool CCandles::isLowerLow(int shift, int checkShift){
+   return getLow(shift) < getLow(checkShift);
+}
+
+bool CCandles::isHigherLow(int shift, int checkShift){
+   return getLow(shift) > getLow(checkShift);
+}
+
+bool CCandles::isLowerHigh(int shift, int checkShift){
+   return getHigh(shift) < getHigh(checkShift);
+}
+
+bool CCandles::isHigherHigh(int shift, int checkShift){
+   return getHigh(shift) > getHigh(checkShift);
+}
+
 bool CCandles::isBodyBiggerThanWick(int shift){
    double totalSize = getHigh(shift) - getLow(shift);
    double bodySize = MathAbs(getOpen(shift) - getClose(shift));
    return bodySize > (totalSize - bodySize);
 }
+
 
